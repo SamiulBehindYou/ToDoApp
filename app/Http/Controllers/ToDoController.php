@@ -54,11 +54,21 @@ class ToDoController extends Controller
         $request->validate([
             'id' => 'required',
         ]);
-        $id = Id::where('nid', $request->id)->exists();
+        $id = Id::where('nid', $request->id)->first();
         $nid = $request->id;
         if ($id) {
-            $todos = Todo::where('nid', $nid)->get();
-            return view('view', compact('todos'))->with('found', 'Id found, Data showing!');
+            if($request->option == 1){
+                $todos = Todo::where('nid', $nid)->get();
+            }
+            elseif($request->option == 2){
+                $todos = Todo::where('nid', $nid)->where('status', 1)->get();
+            }
+            else{
+                $todos = Todo::where('nid', $nid)->where('status', 0)->get();
+            }
+            $name = $id->name;
+            $found = 'Id found, Data showing!';
+            return view('view', compact('todos', 'name', 'found'));
         } else {
             return back()->with('notfound', 'ID not found, Try again or register new ID.');
         }
@@ -68,10 +78,12 @@ class ToDoController extends Controller
     {
         $done = Todo::findOrFail($id);
         $nid = $done->nid;
+        $name = Id::where('nid', $nid)->first()->name;
         $done->status = 1;
         $done->save();
         $todos = Todo::where('nid', $nid)->get();
-        return view('view', compact('todos'));
+        $found = 'Todo done!';
+        return view('view', compact('todos', 'name', 'found'));
 
     }
 
@@ -79,9 +91,11 @@ class ToDoController extends Controller
     {
         $delete = Todo::findOrFail($id);
         $nid = $delete->nid;
+        $name = Id::where('nid', $nid)->first()->name;
         $delete->delete();
         $todos = Todo::where('nid', $nid)->get();
-        return view('view', compact('todos'));
+        $deleted = 'Todo deleted succssfully!';
+        return view('view', compact('todos', 'name', 'deleted'));
     }
 
 

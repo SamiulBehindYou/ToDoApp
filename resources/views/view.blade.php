@@ -6,7 +6,7 @@
         <div class="col-lg-10 m-auto">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h1 class="text-white text-center">Your All ToDo's</h1>
+                    <h1 class="text-white text-center">Your All ToDo's ({{ $name }})</h1>
                 </div>
                 <div class="card-body">
                     <div class="col-lg-12">

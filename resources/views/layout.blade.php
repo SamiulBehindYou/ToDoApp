@@ -138,10 +138,10 @@
                         <a class="nav-link" href="{{ route('create') }}">Create</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Contact</a>
+                        <a class="nav-link" href="{{ route('dashboard') }}" aria-disabled="true">View</a>
                     </li>
                 </ul>
-                
+
             </div>
         </div>
     </nav>
@@ -166,12 +166,11 @@
             });
         </script>
     @endif
-    @if (session('found'))
+    @if (isset($found))
         <script>
             Swal.fire({
-                position: "top-end",
                 icon: "success",
-                title: "{{ session('found') }}",
+                title: "{{ $found }}",
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -182,6 +181,14 @@
             Swal.fire({
                 text: "{{ session('notfound') }}",
                 icon: "error"
+            });
+        </script>
+    @endif
+    @if (isset($deleted))
+        <script>
+            Swal.fire({
+                text: "{{ $deleted }}",
+                icon: "info"
             });
         </script>
     @endif
