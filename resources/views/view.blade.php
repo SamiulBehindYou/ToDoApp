@@ -27,12 +27,13 @@
                                     <td>
                                         @if ($todo->status == 0)
                                             <a href="{{ route('make_done', $todo->id) }}"
-                                                class="btn btn-outline-info btn-sm">Maek done</a>
+                                                class="btn btn-outline-info btn-sm">Make done</a>
                                         @else
                                             <strong class="text-success px-4">Done</strong>
                                         @endif
                                         <a href="{{ route('send_to_trash', $todo->id) }}"
-                                            class="btn btn-outline-danger btn-sm">Trash</a>
+                                            class="btn btn-outline-danger btn-sm">Tras
+                                            h</a>
                                     </td>
                                 </tr>
                             @endforeach
