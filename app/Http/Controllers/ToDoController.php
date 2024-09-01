@@ -58,17 +58,19 @@ class ToDoController extends Controller
         $nid = $request->id;
         if ($id) {
             if($request->option == 1){
-                $todos = Todo::where('nid', $nid)->get();
+                $todos = Todo::where('nid', $nid)->where('trash', 0)->get();
             }
             elseif($request->option == 2){
-                $todos = Todo::where('nid', $nid)->where('status', 1)->get();
+                $todos = Todo::where('nid', $nid)->where('status', 1)->where('trash', 0)->get();
             }
             else{
-                $todos = Todo::where('nid', $nid)->where('status', 0)->get();
+                $todos = Todo::where('nid', $nid)->where('status', 0)->where('trash', 0)->get();
             }
+            //Trash
+            $trash = Todo::where('nid', $nid)->where('trash', 1)->get();
             $name = $id->name;
             $found = 'Id found, Data showing!';
-            return view('view', compact('todos', 'name', 'found'));
+            return view('view', compact('todos', 'trash', 'name', 'found'));
         } else {
             return back()->with('notfound', 'ID not found, Try again or register new ID.');
         }
@@ -81,9 +83,23 @@ class ToDoController extends Controller
         $name = Id::where('nid', $nid)->first()->name;
         $done->status = 1;
         $done->save();
-        $todos = Todo::where('nid', $nid)->get();
+        $todos = Todo::where('nid', $nid)->where('trash', 0)->get();
+        $trash = Todo::where('nid', $nid)->where('trash', 1)->get();
         $found = 'Todo done!';
-        return view('view', compact('todos', 'name', 'found'));
+        return view('view', compact('todos', 'trash', 'name', 'found'));
+
+    }
+    public function send_to_trash($id)
+    {
+        $done = Todo::findOrFail($id);
+        $nid = $done->nid;
+        $name = Id::where('nid', $nid)->first()->name;
+        $done->trash = 1;
+        $done->save();
+        $todos = Todo::where('nid', $nid)->where('trash', 0)->get();
+        $trash = Todo::where('nid', $nid)->where('trash', 1)->get();
+        $found = 'Send to Trash!';
+        return view('view', compact('todos', 'trash', 'name', 'found'));
 
     }
 
@@ -93,9 +109,10 @@ class ToDoController extends Controller
         $nid = $delete->nid;
         $name = Id::where('nid', $nid)->first()->name;
         $delete->delete();
-        $todos = Todo::where('nid', $nid)->get();
+        $todos = Todo::where('nid', $nid)->where('trash', 0)->get();
+        $trash = Todo::where('nid', $nid)->where('trash', 1)->get();
         $deleted = 'Todo deleted succssfully!';
-        return view('view', compact('todos', 'name', 'deleted'));
+        return view('view', compact('todos', 'trash', 'name', 'deleted'));
     }
 
 
